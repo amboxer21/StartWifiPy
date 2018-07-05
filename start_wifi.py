@@ -68,13 +68,20 @@ class StartWifi():
             interface = self.interface
         try:
             self.ip.link("set", index=interfaceIndex(interface), state="up")
-            print('[INFO] - Brought ' + interface + ' interface up successfully.')
+            print('[INFO] - Brought ' + interface + ' interface \"UP\" successfully.')
         except:
             print('[ERROR] - Could not bring interface '+ interface + ' up.')
             sys.exit(0)
 
-    def interfaceDown(self):
-        print('')
+    def interfaceDown(self,interface):
+        if interface is None:
+            interface = self.interface
+        try:
+            self.ip.link("set", index=interfaceIndex(interface), state="down")
+            print('[INFO] - Brought ' + interface + ' interface \"DOWN\" successfully.')
+        except:
+            print('[ERROR] - Could not bring interface '+ interface + ' down.')
+            sys.exit(0)
 
     def continueAnyway(self):
         answer = raw_input("Continue(Y|y|yes|YES|Yes)? ")
