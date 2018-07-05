@@ -94,6 +94,10 @@ class StartWifi():
             return False
 
 if __name__ == '__main__':
-    startWifi = StartWifi()
-    startWifi.continueAnyway()
+    try:
+        startWifi = StartWifi()
+        startWifi.continueAnyway()
+    except KeyboardInterrupt:
+        print("\n[INFO] - Control + C caught. Exiting now!")
+        sys.exit(0)
 
