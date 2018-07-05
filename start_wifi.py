@@ -30,6 +30,7 @@ class StartWifi():
             self.interface = self.wirelessInterface()
         else:
             self.interface = options.interface
+
         if self.essid == 'AnthonyAP' or self.ip_address == '192.168.43.2' or self.gateway == '192.168.43.1':
             print("[INFO] - Using default args since none were specified.")
             print("\n[OPTIONS] - (defaults)")
@@ -56,8 +57,17 @@ class StartWifi():
         except IndexError:
             print("[ERROR] - No wireless interface found.")
 
-    def interfaceUp(self):
-        print('')
+    def interfaceIndex(self,interface):
+        return self.ip.link_lookup(ifname=interface)[0]
+
+    def interfaceUp(self,interface):
+        if interface is None:
+            interface = self.interface
+        try:
+            self.ip.link("set", index=interfaceIndex(interface), state="up")
+            print('[INFO] - Brought ' + interface ' interface up successfully.')
+        except:
+            print('[ERROR] - Could not bring interface '+ interface + ' up.')
 
     def interfaceDown(self):
         print('')
