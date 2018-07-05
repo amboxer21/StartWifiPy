@@ -39,7 +39,7 @@ class StartWifi():
             print("          - gateway: " + self.gateway)
             print("          - ip_address: " + self.ip_address)
 
-    def ipAddress(self,interface):
+    def ipAddress(self,catch_noneInterface_state):
         try:
             return self.ip.get_addr(label=interface)[0]['attrs'][0][1]
         except IndexError:
@@ -61,42 +61,40 @@ class StartWifi():
             sys.exit(0)
 
     def interfaceIndex(self,interface):
-        return self.ip.link_lookup(ifname=interface)[0]
+        return self.ip.link_lookup(ifname=self.catchNoneInterfaceState(interface))[0]
 
     def interfaceUp(self,interface):
-        if interface is None:
-            interface = self.interface
         try:
-            self.ip.link("set", index=interfaceIndex(interface), state="up")
+            self.ip.link("set", index=self.interfaceIndex(self.catchNoneInterfaceState(interface)), state="up")
             print('[INFO] - Brought ' + interface + ' interface \"UP\" successfully.')
         except:
             print('[ERROR] - Could not bring interface '+ interface + ' up.')
             sys.exit(0)
 
     def interfaceDown(self,interface):
-        if interface is None:
-            interface = self.interface
         try:
-            self.ip.link("set", index=interfaceIndex(interface), state="down")
+            self.ip.link("set", index=self.interfaceIndex(self.catchNoneInterfaceState(interface)), state="down")
             print('[INFO] - Brought ' + interface + ' interface \"DOWN\" successfully.')
         except:
             print('[ERROR] - Could not bring interface '+ interface + ' down.')
             sys.exit(0)
 
     def interfaceState(self,interface):
-        if interface is None:
-            interface = self.interface
         try:
             for index in self.ip.get_links():
-                interface = re.search("up|down", str(dict(index)['attrs'][2][1]), re.M | re.I)
-                if interface is not None:
-                    return interface.group()
-            if interface is None:
+                iface = re.search("up|down", str(dict(index)['attrs'][2][1]), re.M | re.I)
+                if iface is not None:
+                    return iface.group()
+            if iface is None:
                 print("[ERROR] - Interface state is unknown or not found.")
                 sys.exit(0)
         except IndexError:
             print("[ERROR] - Interface not found.")
             sys.exit(0)
+
+    def catchNoneInterfaceState(self,interface):
+        if interface is None:
+            interface = self.interface
 
     def continueAnyway(self):
         answer = raw_input("Continue(Y|y|yes|YES|Yes)? ")
@@ -115,4 +113,3 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print("\n[INFO] - Control + C caught. Exiting now!")
         sys.exit(0)
-
