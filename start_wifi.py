@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 
-import pyroute2,re
+import pyroute2,re,sys
 from socket import AF_INET
 from pyroute2 import IPRoute
 from optparse import OptionParser
@@ -44,6 +44,7 @@ class StartWifi():
             return self.ip.get_addr(label=interface)[0]['attrs'][0][1]
         except IndexError:
             print("[ERROR] - Could not get IP because interface \"" + interface + "\" was not found!")
+            sys.exit(0)
 
     def wirelessInterface(self):
         try:
@@ -54,8 +55,10 @@ class StartWifi():
                     return interface.group()
             if interface is None:
                 print("[ERROR] - No wireless interface found.")
+                sys.exit(0)
         except IndexError:
             print("[ERROR] - No wireless interface found.")
+            sys.exit(0)
 
     def interfaceIndex(self,interface):
         return self.ip.link_lookup(ifname=interface)[0]
@@ -65,9 +68,10 @@ class StartWifi():
             interface = self.interface
         try:
             self.ip.link("set", index=interfaceIndex(interface), state="up")
-            print('[INFO] - Brought ' + interface ' interface up successfully.')
+            print('[INFO] - Brought ' + interface + ' interface up successfully.')
         except:
             print('[ERROR] - Could not bring interface '+ interface + ' up.')
+            sys.exit(0)
 
     def interfaceDown(self):
         print('')
