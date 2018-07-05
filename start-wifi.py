@@ -95,6 +95,7 @@ class StartWifi():
     def catchNoneInterfaceState(self,interface):
         if interface is None:
             interface = self.interface
+        return interface
 
     def continueAnyway(self):
         answer = raw_input("Continue(Y|y|yes|YES|Yes)? ")
