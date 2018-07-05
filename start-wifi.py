@@ -48,8 +48,8 @@ class StartWifi():
 
     def wirelessInterface(self):
         try:
-            for index in self.ip.get_addr():
-                interface = re.search("^w[\w\d]+\d", str(dict(index)['attrs'][3][1]), re.M | re.I)
+            for index in self.ip.get_links():
+                interface = re.search("^w[\w\d]+\d", str(dict(index)['attrs'][0][1]), re.M | re.I)
                 if interface is not None:
                     print("[INFO] - Using the \"" + interface.group() + "\" wireless interface.")
                     return interface.group()
