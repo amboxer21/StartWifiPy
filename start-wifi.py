@@ -83,6 +83,21 @@ class StartWifi():
             print('[ERROR] - Could not bring interface '+ interface + ' down.')
             sys.exit(0)
 
+    def interfaceState(self,interface):
+        if interface is None:
+            interface = self.interface
+        try:
+            for index in self.ip.get_links():
+                interface = re.search("up|down", str(dict(index)['attrs'][2][1]), re.M | re.I)
+                if interface is not None:
+                    return interface.group()
+            if interface is None:
+                print("[ERROR] - Interface state is unknown or not found.")
+                sys.exit(0)
+        except IndexError:
+            print("[ERROR] - Interface not found.")
+            sys.exit(0)
+
     def continueAnyway(self):
         answer = raw_input("Continue(Y|y|yes|YES|Yes)? ")
         regex  = re.search('(Y|y|yes|YES|Yes)', str(answer), re.M)
