@@ -1,0 +1,37 @@
+The static route is the default rotue and you can find the static route via ip route. 
+
+[anthony@ghost StartWifiPy]$ route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         200.255.100.254 0.0.0.0         UG    100    0        0 enp0s25
+200.255.100.0   0.0.0.0         255.255.255.0   U     100    0        0 enp0s25
+[anthony@ghost StartWifiPy]$ ip route
+default via 200.255.100.254 dev enp0s25 proto static metric 100 
+200.255.100.0/24 dev enp0s25 proto kernel scope link src 200.255.100.118 metric 100 
+
+
+The output of the following function will show the statis route by listing the statis route as proto=4. 
+
+    def routes(self):
+        try:
+            for route in ip.route('dump'):
+                #print(str(route))
+                return str(dict(route)['attrs'])
+        except IndexError:
+            pass
+
+>>> routes()
+[('RTA_TABLE', 254), ('RTA_PRIORITY', 100), ('RTA_GATEWAY', '200.255.100.254'), ('RTA_OIF', 2)]
+[('RTA_TABLE', 254), ('RTA_DST', '200.255.100.0'), ('RTA_PRIORITY', 100), ('RTA_PREFSRC', '200.255.100.118'), ('RTA_OIF', 2)]
+[('RTA_TABLE', 255), ('RTA_DST', '127.0.0.0'), ('RTA_PREFSRC', '127.0.0.1'), ('RTA_OIF', 1)]
+[('RTA_TABLE', 255), ('RTA_DST', '127.0.0.0'), ('RTA_PREFSRC', '127.0.0.1'), ('RTA_OIF', 1)]
+[('RTA_TABLE', 255), ('RTA_DST', '127.0.0.1'), ('RTA_PREFSRC', '127.0.0.1'), ('RTA_OIF', 1)]
+[('RTA_TABLE', 255), ('RTA_DST', '127.255.255.255'), ('RTA_PREFSRC', '127.0.0.1'), ('RTA_OIF', 1)]
+[('RTA_TABLE', 255), ('RTA_DST', '200.255.100.0'), ('RTA_PREFSRC', '200.255.100.118'), ('RTA_OIF', 2)]
+[('RTA_TABLE', 255), ('RTA_DST', '200.255.100.118'), ('RTA_PREFSRC', '200.255.100.118'), ('RTA_OIF', 2)]
+[('RTA_TABLE', 255), ('RTA_DST', '200.255.100.255'), ('RTA_PREFSRC', '200.255.100.118'), ('RTA_OIF', 2)]
+
+List of relevant protos:
+[anthony@ghost ~]$ awk '/^(2|4)[ \t]/{print}' /etc/iproute2/rt_protos 
+2 kernel
+4 static
