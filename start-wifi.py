@@ -95,7 +95,8 @@ class StartWifi():
     def routes(self):
         try:
             for route in ip.route('dump'):
-                print(str(route))
+                #print(str(route))
+                return str(dict(route)['attrs'])
         except IndexError:
             pass
         
