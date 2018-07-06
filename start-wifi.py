@@ -92,6 +92,20 @@ class StartWifi():
             print("[ERROR] - Interface not found.")
             sys.exit(0)
 
+    def routes(self):
+        try:
+            for route in ip.route('dump'):
+                print(str(route))
+        except IndexError:
+            pass
+        
+
+    def addRoute(self):
+        print('')
+
+    def removeRoute(self):
+        print('')
+
     def catchNoneInterfaceState(self,interface):
         if interface is None:
             interface = self.interface
