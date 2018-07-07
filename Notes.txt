@@ -15,21 +15,24 @@ The output of the following function will show the statis route by listing the s
     def routes(self):
         try:
             for route in ip.route('dump'):
-                #print(str(route))
-                return str(dict(route)['attrs'])
+                print(str(route))
+                #return str(dict(route)['attrs'])
         except IndexError:
             pass
 
 >>> routes()
-[('RTA_TABLE', 254), ('RTA_PRIORITY', 100), ('RTA_GATEWAY', '200.255.100.254'), ('RTA_OIF', 2)]
-[('RTA_TABLE', 254), ('RTA_DST', '200.255.100.0'), ('RTA_PRIORITY', 100), ('RTA_PREFSRC', '200.255.100.118'), ('RTA_OIF', 2)]
-[('RTA_TABLE', 255), ('RTA_DST', '127.0.0.0'), ('RTA_PREFSRC', '127.0.0.1'), ('RTA_OIF', 1)]
-[('RTA_TABLE', 255), ('RTA_DST', '127.0.0.0'), ('RTA_PREFSRC', '127.0.0.1'), ('RTA_OIF', 1)]
-[('RTA_TABLE', 255), ('RTA_DST', '127.0.0.1'), ('RTA_PREFSRC', '127.0.0.1'), ('RTA_OIF', 1)]
-[('RTA_TABLE', 255), ('RTA_DST', '127.255.255.255'), ('RTA_PREFSRC', '127.0.0.1'), ('RTA_OIF', 1)]
-[('RTA_TABLE', 255), ('RTA_DST', '200.255.100.0'), ('RTA_PREFSRC', '200.255.100.118'), ('RTA_OIF', 2)]
-[('RTA_TABLE', 255), ('RTA_DST', '200.255.100.118'), ('RTA_PREFSRC', '200.255.100.118'), ('RTA_OIF', 2)]
-[('RTA_TABLE', 255), ('RTA_DST', '200.255.100.255'), ('RTA_PREFSRC', '200.255.100.118'), ('RTA_OIF', 2)]
+{'family': 2, 'dst_len': 0, 'proto': 16, 'tos': 0, 'event': 'RTM_NEWROUTE', 'header': {'pid': 3230, 'length': 68, 'flags': 2, 'error': None, 'type': 24, 'sequence_number': 255}, 'flags': 0, 'attrs': [('RTA_TABLE', 254), ('RTA_PRIORITY', 304), ('RTA_PREFSRC', '192.168.43.187'), ('RTA_GATEWAY', '192.168.43.1'), ('RTA_OIF', 4)], 'table': 254, 'src_len': 0, 'type': 1, 'scope': 0}
+{'family': 2, 'dst_len': 24, 'proto': 16, 'tos': 0, 'event': 'RTM_NEWROUTE', 'header': {'pid': 3230, 'length': 68, 'flags': 2, 'error': None, 'type': 24, 'sequence_number': 255}, 'flags': 0, 'attrs': [('RTA_TABLE', 254), ('RTA_DST', '192.168.43.0'), ('RTA_PRIORITY', 304), ('RTA_PREFSRC', '192.168.43.187'), ('RTA_OIF', 4)], 'table': 254, 'src_len': 0, 'type': 1, 'scope': 253}
+{'family': 2, 'dst_len': 32, 'proto': 3, 'tos': 0, 'event': 'RTM_NEWROUTE', 'header': {'pid': 3230, 'length': 52, 'flags': 2, 'error': None, 'type': 24, 'sequence_number': 255}, 'flags': 0, 'attrs': [('RTA_TABLE', 254), ('RTA_DST', '192.168.43.1'), ('RTA_OIF', 4)], 'table': 254, 'src_len': 0, 'type': 1, 'scope': 253}
+{'family': 2, 'dst_len': 32, 'proto': 2, 'tos': 0, 'event': 'RTM_NEWROUTE', 'header': {'pid': 3230, 'length': 60, 'flags': 2, 'error': None, 'type': 24, 'sequence_number': 255}, 'flags': 0, 'attrs': [('RTA_TABLE', 255), ('RTA_DST', '127.0.0.0'), ('RTA_PREFSRC', '127.0.0.1'), ('RTA_OIF', 1)], 'table': 255, 'src_len': 0, 'type': 3, 'scope': 253}
+{'family': 2, 'dst_len': 8, 'proto': 2, 'tos': 0, 'event': 'RTM_NEWROUTE', 'header': {'pid': 3230, 'length': 60, 'flags': 2, 'error': None, 'type': 24, 'sequence_number': 255}, 'flags': 0, 'attrs': [('RTA_TABLE', 255), ('RTA_DST', '127.0.0.0'), ('RTA_PREFSRC', '127.0.0.1'), ('RTA_OIF', 1)], 'table': 255, 'src_len': 0, 'type': 2, 'scope': 254}
+{'family': 2, 'dst_len': 32, 'proto': 2, 'tos': 0, 'event': 'RTM_NEWROUTE', 'header': {'pid': 3230, 'length': 60, 'flags': 2, 'error': None, 'type': 24, 'sequence_number': 255}, 'flags': 0, 'attrs': [('RTA_TABLE', 255), ('RTA_DST', '127.0.0.1'), ('RTA_PREFSRC', '127.0.0.1'), ('RTA_OIF', 1)], 'table': 255, 'src_len': 0, 'type': 2, 'scope': 254}
+{'family': 2, 'dst_len': 32, 'proto': 2, 'tos': 0, 'event': 'RTM_NEWROUTE', 'header': {'pid': 3230, 'length': 60, 'flags': 2, 'error': None, 'type': 24, 'sequence_number': 255}, 'flags': 0, 'attrs': [('RTA_TABLE', 255), ('RTA_DST', '127.255.255.255'), ('RTA_PREFSRC', '127.0.0.1'), ('RTA_OIF', 1)], 'table': 255, 'src_len': 0, 'type': 3, 'scope': 253}
+{'family': 2, 'dst_len': 32, 'proto': 2, 'tos': 0, 'event': 'RTM_NEWROUTE', 'header': {'pid': 3230, 'length': 60, 'flags': 2, 'error': None, 'type': 24, 'sequence_number': 255}, 'flags': 0, 'attrs': [('RTA_TABLE', 255), ('RTA_DST', '192.168.43.0'), ('RTA_PREFSRC', '192.168.43.187'), ('RTA_OIF', 4)], 'table': 255, 'src_len': 0, 'type': 3, 'scope': 253}
+{'family': 2, 'dst_len': 32, 'proto': 2, 'tos': 0, 'event': 'RTM_NEWROUTE', 'header': {'pid': 3230, 'length': 60, 'flags': 2, 'error': None, 'type': 24, 'sequence_number': 255}, 'flags': 0, 'attrs': [('RTA_TABLE', 255), ('RTA_DST', '192.168.43.2'), ('RTA_PREFSRC', '192.168.43.2'), ('RTA_OIF', 4)], 'table': 255, 'src_len': 0, 'type': 2, 'scope': 254}
+{'family': 2, 'dst_len': 32, 'proto': 2, 'tos': 0, 'event': 'RTM_NEWROUTE', 'header': {'pid': 3230, 'length': 60, 'flags': 2, 'error': None, 'type': 24, 'sequence_number': 255}, 'flags': 0, 'attrs': [('RTA_TABLE', 255), ('RTA_DST', '192.168.43.187'), ('RTA_PREFSRC', '192.168.43.187'), ('RTA_OIF', 4)], 'table': 255, 'src_len': 0, 'type': 2, 'scope': 254}
+{'family': 2, 'dst_len': 32, 'proto': 2, 'tos': 0, 'event': 'RTM_NEWROUTE', 'header': {'pid': 3230, 'length': 60, 'flags': 2, 'error': None, 'type': 24, 'sequence_number': 255}, 'flags': 0, 'attrs': [('RTA_TABLE', 255), ('RTA_DST', '192.168.43.255'), ('RTA_PREFSRC', '192.168.43.187'), ('RTA_OIF', 4)], 'table': 255, 'src_len': 0, 'type': 3, 'scope': 253}
+
 
 List of relevant protos:
 [anthony@ghost ~]$ awk '/^(2|4)[ \t]/{print}' /etc/iproute2/rt_protos 
