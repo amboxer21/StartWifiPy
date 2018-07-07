@@ -2,7 +2,7 @@
 
 import pyroute2,re,sys
 from socket import AF_INET
-from pyroute2 import IPRoute
+from pyroute2 import IPRoute,IPDB
 from optparse import OptionParser
 
 class StartWifi():
@@ -20,7 +20,8 @@ class StartWifi():
             default=False, help='Reset all wireless configuration that start_wifi.py just set.')
         (options, args) = parser.parse_args()
 
-        self.ip = IPRoute()
+        self.ipdb    = IPDB()
+        self.iproute = IPRoute()
 
         self.essid = options.essid
         self.gateway = options.gateway
@@ -41,15 +42,15 @@ class StartWifi():
 
     def ipAddress(self,catch_noneInterface_state):
         try:
-            return self.ip.get_addr(label=interface)[0]['attrs'][0][1]
+            return self.iproute.get_addr(label=interface)[0]['attrs'][0][1]
         except IndexError:
             print("[ERROR] - Could not get IP because interface \"" + interface + "\" was not found!")
             sys.exit(0)
 
     def wirelessInterface(self):
         try:
-            for index in self.ip.get_links():
-                interface = re.search("^w[\w\d]+\d", str(dict(index)['attrs'][0][1]), re.M | re.I)
+            for i in self.ipdb.interfaces:
+                interface = re.search("^w[\w\d]+\d", str(i), re.M | re.I)
                 if interface is not None:
                     print("[INFO] - Using the \"" + interface.group() + "\" wireless interface.")
                     return interface.group()
@@ -61,19 +62,19 @@ class StartWifi():
             sys.exit(0)
 
     def interfaceIndex(self,interface):
-        return self.ip.link_lookup(ifname=self.catchNoneInterfaceState(interface))[0]
+        return self.iproute.link_lookup(ifname=self.catchNoneInterfaceState(interface))[0]
 
-    def interfaceUp(self,interface):
+    def setInterfaceUp(self,interface):
         try:
-            self.ip.link("set", index=self.interfaceIndex(self.catchNoneInterfaceState(interface)), state="up")
+            self.iproute.link("set", index=self.interfaceIndex(self.catchNoneInterfaceState(interface)), state="up")
             print('[INFO] - Brought ' + interface + ' interface \"UP\" successfully.')
         except:
             print('[ERROR] - Could not bring interface '+ interface + ' up.')
             sys.exit(0)
 
-    def interfaceDown(self,interface):
+    def setInterfaceDown(self,interface):
         try:
-            self.ip.link("set", index=self.interfaceIndex(self.catchNoneInterfaceState(interface)), state="down")
+            self.iproute.link("set", index=self.interfaceIndex(self.catchNoneInterfaceState(interface)), state="down")
             print('[INFO] - Brought ' + interface + ' interface \"DOWN\" successfully.')
         except:
             print('[ERROR] - Could not bring interface '+ interface + ' down.')
@@ -81,16 +82,21 @@ class StartWifi():
 
     def interfaceState(self,interface):
         try:
-            for index in self.ip.get_links():
-                iface = re.search("up|down", str(dict(index)['attrs'][2][1]), re.M | re.I)
-                if iface is not None:
-                    return iface.group()
+            iface = re.search("up|down", str(self.ipdb.interfaces[self.catchNoneInterfaceState(interface)].operstate), re.M | re.I)
             if iface is None:
                 print("[ERROR] - Interface state is unknown or not found.")
                 sys.exit(0)
+            return iface.group()
         except IndexError:
             print("[ERROR] - Interface not found.")
             sys.exit(0)
+
+    def defaultRoute(self):
+        try:
+            return self.ipdb.routes[{'dst': 'default', 'family': AF_INET}]
+        except KeyError:
+            print("[ERROR] - Default route not present. Adding it now.")
+            # Add default route here
 
     def routes(self):
         try:
@@ -99,7 +105,6 @@ class StartWifi():
                 return str(dict(route)['attrs'])
         except IndexError:
             pass
-        
 
     def addRoute(self):
         print('')
